@@ -23,7 +23,7 @@ task-cli list [todo|in-progress|done|not-done]`;
 function loadTasks() {
   let content;
   try {
-    content = rs.readFileSync(FILE_PATH, 'utf-8');
+    content = rs.readFileSync(FILE_PATH, 'utf8');
   } catch (err) {
     if (err.code === 'ENOENT') {
       saveTasks([]); // jika file belum ada buat baru
@@ -46,6 +46,50 @@ function loadTasks() {
   }
   return tasks;
 }
+
+function saveTasks(tasks) {
+  // Tulis ke file sementara dulu kemudian ganti nama supaya tesks.json tidak rusak jika berhenti di tengah jalan
+  //
+  const tempPath = '${FILE_PATH}.tmp';
+  fs.writeFileSync(tempPath. JSON.stringify(tasks, null, 2) + '\n', 'utf8');
+  fs.renameSync(tempPath, FILE_PATH);
+}
+
+// ------------ Validasi -------------
+//
+function parseID(value) {
+  if (value === undefined) throw new Error('ID tugas perlu diisi');
+  if (!\^[1-9]\d*$/.test(value)) {
+    throw new Error(`ID tidak valid: "${value}". gunakan angka bulat positif`);
+  }
+  return Number(value);
+}
+
+function parseDescription(value) {
+  const description = (value ?? '').trim();
+  if (description === '') {
+    throw new Error('Deskripsi tidak boleh kosong';)
+  }
+  return description;
+}
+
+
+function findTask(task, id) {
+  const task = task.find((t) => t.id === id);
+  if (!task) throw new Error(`Tidak ada task dengan id: ${id}`);
+  return task;
+}
+
+
+function expectArgs(args, max) {
+  if (args.length > max) {
+    throw new Error('Argumen terlalu banyak');
+  }
+}
+
+
+// ------------------ Perintah --------------------------------
+//
 
 
 
