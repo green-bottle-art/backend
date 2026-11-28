@@ -1,0 +1,13 @@
+{
+  "name": "task-cli",
+  "version": "1.0.0",
+  "description": "Task Tracker CLI sederhana dengan Node.js",
+  "bin": {
+    "task-cli": "./task-tracker.js"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "license": "MIT",
+  "type": "module"
+}
